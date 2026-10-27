@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.class
+.ipynb_checkpoints/
+.env
+.venv/
+venv/
+# Ignorar otros grupos para que el repo sea limpio del grupo 05
+grupo_01.csv
+grupo_02.csv
+grupo_03.csv
+grupo_04.csv
+grupo_06.csv
+grupo_07.csv
+grupo_08.csv
+grupo_09.csv
+grupo_10.csv
+grupo_11.csv
+grupo_12.csv
+grupo_13.csv
+grupo_14.csv
