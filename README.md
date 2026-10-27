@@ -7,7 +7,7 @@
 
 ---
 
-## 📌 1. Visión General del Proyecto
+## 1. Visión General del Proyecto
 
 Este proyecto implementa una solución integral de analítica e Inteligencia Artificial para la predicción de **Alertas de Calidad del Aire** en el municipio de **Cartago, Valle del Cauca**. 
 
@@ -20,7 +20,7 @@ A partir de un conjunto de mediciones ambientales recolectadas por estaciones de
 
 ---
 
-## 🛠️ 2. Tarea 1: Configuración del Entorno (Docker + WSL)
+## 2. Tarea 1: Configuración del Entorno (Docker + WSL)
 
 El entorno fue concebido para garantizar **100% de reproducibilidad** mediante contenedores Docker, aislando las dependencias del sistema operativo anfitrión.
 
@@ -100,7 +100,7 @@ docker exec parcial2_ia python src/parcial2.py
 
 ---
 
-## 🔍 3. Tarea 2: Carga e Inspección de Datos
+## 3. Tarea 2: Carga e Inspección de Datos
 
 El script `src/parcial2.py` carga el archivo asignado `data/grupo_05.csv` e inspecciona su estructura inicial en memoria.
 
@@ -122,7 +122,7 @@ El script `src/parcial2.py` carga el archivo asignado `data/grupo_05.csv` e insp
    * `medicion_id`: `object` (cadena de texto)
    * `estacion`: `object` (categórica)
    * `pm25_ugm3`: `float64` (numérica continua)
-   * `viento_m_s`: **`object`** (¡anomalía de tipo!)
+   * `viento_m_s`: **`object`** (anomalía de tipo detectada)
    * `alerta_calidad`: `int64` (binaria: 0 o 1)
 
 4. **Valores nulos detectados por columna:**
@@ -135,15 +135,15 @@ El script `src/parcial2.py` carga el archivo asignado `data/grupo_05.csv` e insp
 5. **Cantidad de filas duplicadas:**
    * **4 filas duplicadas exactas**.
 
-### ❓ Pregunta Clave de la Tarea 2
+### Pregunta Clave de la Tarea 2
 > **¿Alguna columna numérica aparece con un tipo de dato que no debería tener? ¿Por qué ocurre?**
 
 * **Respuesta:** **Sí, la columna `viento_m_s` aparece registrada con tipo `object` (texto) en lugar de `float64`.**  
-  **Causa técnica:** El sistema de información de origen exportó algunos registros utilizando la coma decimal castellana `","` en lugar del punto estándar internacional (por ejemplo, los registros `M001` con `"2,0"`, `M044` con `"5,6"`). Al encontrar cadenas con caracteres no numéricos, el motor de inferencia de tipos de Pandas se vio obligado a clasificar toda la columna como tipo `object`, impidiendo la realización directa de operaciones algebraicas y matriciales.
+  **Causa técnica:** El sistema de información de origen exportó algunos registros utilizando la coma decimal castellana `","` en lugar del punto estándar internacional (por ejemplo, los registros `M001` con `"2,0"`, `M044` con `"5,6"`). Al encontrar cadenas con caracteres no numéricos, el motor de inferencia de tipos de Pandas clasifica toda la columna como tipo `object`, impidiendo la realización directa de operaciones algebraicas y matriciales continuas.
 
 ---
 
-## 🧹 4. Tarea 3: Calidad y Limpieza de Datos con Pandas
+## 4. Tarea 3: Calidad y Limpieza de Datos con Pandas
 
 Se identificaron y corrigieron **4 problemas de calidad** en el archivo:
 
@@ -156,7 +156,7 @@ Se identificaron y corrigieron **4 problemas de calidad** en el archivo:
 | **3. Outlier Extremo / Valor Imposible en `pm25_ugm3`** | `df['pm25_ugm3'].max() == 70100.0` en la fila `M075`. | **Corregir** a `70.1` $\mu\text{g/m}^3$ (`df.replace(70100.0, 70.1)`). | Una concentración de 70,100 $\mu\text{g/m}^3$ es letal y físicamente imposible en la atmósfera. Es un evidente error de digitación por factor de 1000 ($70100 / 1000 = 70.1$). Con $70.1\ \mu\text{g/m}^3$ y viento de $6.4\ \text{m/s}$, encaja perfectamente con el estado de alerta 1. |
 | **4. Valores Faltantes (`NaN`) en `viento_m_s`** | `df['viento_m_s'].isnull().sum() == 3` en las estaciones Centro y Terminal (`M006`, `M010`, `M021`). | **Eliminar** con `df.dropna()`. | Los 3 registros representan apenas el **3.7%** del dataset. En meteorología, imputar valores sintéticos de viento sin contar con estaciones barométricas de respaldo puede inducir sesgo en la física de dispersión eólica. |
 
-### ❓ Pregunta Clave de la Tarea 3 (Valor más sospechoso)
+### Pregunta Clave de la Tarea 3 (Valor más sospechoso)
 > **¿Qué valor le pareció más sospechoso? Calcular la media de esa columna antes y después de corregirlo y explicar cómo habría afectado el escalado del perceptrón si no se hubiera corregido.**
 
 * **Valor más sospechoso:** **$70,100.0\ \mu\text{g/m}^3$** en la estación Universidad (medición `M075`).
@@ -178,7 +178,7 @@ Se identificaron y corrigieron **4 problemas de calidad** en el archivo:
 
 ---
 
-## 📊 5. Tarea 4: Visualización con Seaborn
+## 5. Tarea 4: Visualización con Seaborn
 
 ### Gráfico 1: Dispersión PM2.5 vs. Velocidad del Viento
 ![Gráfico 1: Dispersión](grafico1_dispersion.png)
@@ -201,7 +201,7 @@ Se identificaron y corrigieron **4 problemas de calidad** en el archivo:
 
 ---
 
-## 🧠 6. Tarea 5: Perceptrón desde Cero con NumPy
+## 6. Tarea 5: Perceptrón desde Cero con NumPy
 
 Siguiendo estrictamente las directrices pedagógicas de la **Clase 9**, el modelo fue programado **únicamente con álgebra matricial en NumPy**, sin utilizar ninguna librería externa de Machine Learning.
 
@@ -259,7 +259,7 @@ Siguiendo estrictamente las directrices pedagógicas de la **Clase 9**, el model
 
 ---
 
-## 💡 7. Tarea 6: Interpretación de Resultados y Preguntas del Parcial
+## 7. Tarea 6: Interpretación de Resultados y Preguntas del Parcial
 
 ### 1. ¿Qué significa el signo de $w_1$ y de $w_2$ en el contexto del problema? ¿Tiene sentido para Cartago?
 * **Signo de $w_1 = +2.4973$ (Positivo):** Indica una relación directamente proporcional. A mayor concentración de material particulado $PM_{2.5}$, el término lineal $z$ aumenta drásticamente, incrementando la probabilidad $\sigma(z)$ de emitir una alerta ambiental.
@@ -305,13 +305,14 @@ A la **Alcaldía Municipal de Cartago** y a las autoridades ambientales (**CVC**
 
 ---
 
-## 📦 8. Tarea 7: Repositorio y Registro de Commits
+## 8. Tarea 7: Repositorio y Registro de Commits
 
 El desarrollo se gestionó mediante Git aplicando control de versiones progresivo:
 
-* **Commit 1:** `feat(entorno): configuración Docker, docker-compose y carga de datos grupo_05` (Tareas 1 y 2).
-* **Commit 2:** `feat(limpieza): depuración de datos con Pandas y visualizaciones Seaborn` (Tareas 3 y 4).
+* **Commit 1:** `feat(entorno): configuración Docker, docker-compose y estructura base` (Tareas 1 y 2).
+* **Commit 2:** `feat(datos): limpieza con Pandas y visualización exploratoria con Seaborn` (Tareas 3 y 4).
 * **Commit 3:** `feat(modelo): perceptrón con NumPy, métricas, interpretación y README final` (Tareas 5, 6 y 7).
+* **Commit 4:** `docs: formalización académica del README eliminando iconos y elementos decorativos`.
 
 ---
 *Trabajo desarrollado por:* **Miguel Ángel Ramírez Gutiérrez**  
